@@ -93,7 +93,7 @@ const handleFormSubmit = e => {
       </div>
       <div className="form-group">
         {/* <input type="submit" value={props.currentId == "" ? "Save" : "Update"} className="btn btn-primary btn-block" /> */}
-        <input type="submit" className="btn btn-primary btn-block" />
+        <input type="submit" value={props.currentId == '' ? 'Save' : 'Update'} className="btn btn-primary btn-block" />
       </div>
     </form>
   );

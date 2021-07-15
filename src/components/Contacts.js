@@ -18,13 +18,23 @@ function Contacts() {
 }, [])
 
   const addOrEdit = (obj) => {
+    if(currentId == '') {
       firebaseDb.child('contacts').push(
           obj,
           err => {
               if (err)
               console.log(err)
+              setCurrentId('')
           }
-      )
+      )} else {
+        firebaseDb.child(`contacts/${currentId}`).set(
+          obj,
+          err => {
+              if (err)
+              console.log(err)
+              setCurrentId('')
+          }
+        )}
   };
   return (
     <Fragment>
