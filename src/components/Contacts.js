@@ -5,6 +5,7 @@ import firebaseDb from "../firebase";
 function Contacts() {
 
   var [contactObjects, setContactObjects] = useState({})
+  var [currentId, setCurrentId] = useState('')
 
   useEffect(() => {
     firebaseDb.child('contacts').on('value', snapshot => {
@@ -34,7 +35,7 @@ function Contacts() {
       </div>
       <div className="row">
         <div className="col-md-5">
-          <ContactForm addOrEdit={addOrEdit} />
+          <ContactForm {...({ addOrEdit:addOrEdit,currentId, contactObjects })} />
         </div>
         <div className="col-md-7">
         <table className="table table-borderless table-stripped">
@@ -54,18 +55,12 @@ function Contacts() {
                                         <td>{contactObjects[key].mobile}</td>
                                         <td>{contactObjects[key].email}</td>
                                         <td className="bg-light">
-                                            {/* <a className="btn text-primary" onClick={() => { setCurrentId(key) }}>
+                                            <a className="btn text-primary" onClick={() => { setCurrentId(key) }}>
                                                 <i className="fas fa-pencil-alt"></i>
                                             </a>
-                                            <a className="btn text-danger" onClick={() => { onDelete(key) }}>
+                                            {/* <a className="btn text-danger" onClick={() => { onDelete(key) }}>
                                                 <i className="far fa-trash-alt"></i>
                                             </a> */}
-                                               <a className="btn text-primary" >
-                                                <i className="fas fa-pencil-alt"></i>
-                                            </a>
-                                            <a className="btn text-danger">
-                                                <i className="far fa-trash-alt"></i>
-                                            </a>
                                         </td>
                                     </tr>
                                 ))
