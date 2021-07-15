@@ -1,8 +1,21 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import ContactForm from "./ContactForm";
 import firebaseDb from "../firebase";
 
 function Contacts() {
+
+  var [contactObjects, setContactObjects] = useState({})
+
+  useEffect(() => {
+    firebaseDb.child('contacts').on('value', snapshot => {
+        if (snapshot.val() != null) {
+            setContactObjects({
+                ...snapshot.val()
+            });
+        }
+    })
+}, [])
+
   const addOrEdit = (obj) => {
       firebaseDb.child('contacts').push(
           obj,
@@ -24,7 +37,41 @@ function Contacts() {
           <ContactForm addOrEdit={addOrEdit} />
         </div>
         <div className="col-md-7">
-          <div>list of contacts</div>
+        <table className="table table-borderless table-stripped">
+                        <thead className="thead-light">
+                            <tr>
+                                <th>Name</th>
+                                <th>Mobile</th>
+                                <th>Email</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                Object.keys(contactObjects).map((key) => (
+                                    <tr key={key}>
+                                        <td>{contactObjects[key].fullName}</td>
+                                        <td>{contactObjects[key].mobile}</td>
+                                        <td>{contactObjects[key].email}</td>
+                                        <td className="bg-light">
+                                            {/* <a className="btn text-primary" onClick={() => { setCurrentId(key) }}>
+                                                <i className="fas fa-pencil-alt"></i>
+                                            </a>
+                                            <a className="btn text-danger" onClick={() => { onDelete(key) }}>
+                                                <i className="far fa-trash-alt"></i>
+                                            </a> */}
+                                               <a className="btn text-primary" >
+                                                <i className="fas fa-pencil-alt"></i>
+                                            </a>
+                                            <a className="btn text-danger">
+                                                <i className="far fa-trash-alt"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                ))
+                            }
+                        </tbody>
+                    </table>
         </div>
       </div>
     </Fragment>
